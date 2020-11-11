@@ -1,3 +1,3 @@
 WeatherApp - application for displaying weather in three different languages
 
-Technologies: Node.js (Express.js, Axios), Vue.js, JavaScript, HTML, CSS, Bootstrap
+Technologies: Node.js (Express.js), Vue.js (Axios), JavaScript, HTML, CSS, Bootstrap
