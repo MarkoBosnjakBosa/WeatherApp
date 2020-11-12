@@ -25,6 +25,60 @@
           <button type="button" class="btn currentLocation">Location <i class="fas fa-location-arrow"></i></button>
         </div>
     </form>
+    <ul class="nav nav-tabs justify-content-center" role="tablist">
+      <li class="nav-item"><a id="weatherTab" class="nav-link active" data-toggle="tab" href="#weatherContent" role="tab" aria-controls="weather" aria-selected="true">{{languageConstants[0]}}</a></li>
+      <li class="nav-item"><a id="forecastTab" class="nav-link" data-toggle="tab" href="#forecastContent" role="tab" aria-controls="forecast" aria-selected="false">{{languageConstants[1]}}</a></li>
+    </ul>
+    <div class="tab-content">
+      <div v-if="Object.entries(weather.current).length" id="weatherContent" class="tab-pane fade show active" role="tabpanel" aria-labelledby="weatherTab">
+        <div style="text-align: center"><img :src="'http://openweathermap.org/img/wn/' + weather.current.weather[0].icon + '@2x.png'" alt="Weather Icon"><b>{{weather.current.main.temp + " " + getUnitFormatIcon() + " - " + weather.current.weather[0].description}}</b>
+          <table class="table table-striped">
+            <thead>
+
+            </thead>
+            <tbody>
+              <tr><td>{{languageConstants[2]}}</td><td>{{weather.current.name}}</td></tr>
+              <tr><td>{{languageConstants[3]}}</td><td>{{weather.current.main.feels_like + " " + getUnitFormatIcon()}}</td></tr>
+              <tr><td>{{languageConstants[4]}}</td><td>{{weather.current.main.temp_min + " " + getUnitFormatIcon()}}</td></tr>
+              <tr><td>{{languageConstants[5]}}</td><td>{{weather.current.main.temp_max + " " + getUnitFormatIcon()}}</td></tr>
+              <tr><td>{{languageConstants[6]}}</td><td>{{convertWindSpeed(weather.current.wind.speed) + " " + getWindDirection(weather.current.wind.deg)}}</td></tr>
+              <tr><td>{{languageConstants[7]}}</td><td>{{weather.current.main.humidity}} %</td></tr>
+              <tr><td>{{languageConstants[8]}}</td><td>{{weather.current.main.pressure}} hPa</td></tr>
+              <tr><td>{{languageConstants[9]}}</td><td>{{convertTime(weather.current.sys.sunrise)}}</td></tr>
+              <tr><td>{{languageConstants[10]}}</td><td>{{convertTime(weather.current.sys.sunset)}}</td></tr>
+              <tr><td>{{languageConstants[11]}}</td><td><span>{{languageConstants[12] + " " + weather.current.coord.lon}}</span><br/><span>{{languageConstants[13] + " " + weather.current.coord.lat}}</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div v-if="Object.entries(weather.forecast).length" id="forecastContent" class="tab-pane fade" role="tabpanel" aria-labelledby="forecastTab">
+        <table class="table forecastTable">
+          <thead>
+            <tr>
+              <th>{{languageConstants[14]}}</th>
+              <th colspan="2" style="text-align: center">{{languageConstants[15]}}</th>
+              <th>{{languageConstants[16]}}</th>
+              <th>{{languageConstants[4]}}</th>
+              <th>{{languageConstants[5]}}</th>
+              <th>{{languageConstants[6]}}</th>
+              <th>{{languageConstants[7]}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in weather.forecast.list" :key="index">
+              <td>{{convertDate(item.dt_txt)}}</td>
+              <td><img :src="'http://openweathermap.org/img/wn/' + item.weather[0].icon + '@2x.png'" alt="Weather Icon"></td>
+              <td>{{item.weather[0].description}}</td>
+              <td>{{item.main.temp + " " + getUnitFormatIcon()}}</td>
+              <td>{{item.main.temp_min + " " + getUnitFormatIcon()}}</td>
+              <td>{{item.main.temp_max + " " + getUnitFormatIcon()}}</td>
+              <td>{{convertWindSpeed(item.wind.speed) + " " + getWindDirection(item.wind.deg)}}</td>
+              <td>{{item.main.humidity + "%"}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -39,6 +93,11 @@
 			return {
         language: "",
         languageConstants: [],
+        weather: {
+          current: {},
+          forecast: {},
+          unitFormat: ""
+        },
 				submitting: false,
         cityError: false,
         unitFormatError: false,
@@ -68,7 +127,10 @@
         var body = {city: this.search.city, unitFormat: this.search.unitFormat, language: this.language};
         axios.post(process.env.VUE_APP_BASE_URL + process.env.VUE_APP_PORT + "/getWeather", body).then(response => {
             if(response.data.valid) {
-                console.log(response.data);
+                this.weather.current = response.data.weather;
+                this.weather.forecast = response.data.forecast;
+                this.weather.unitFormat = response.data.unitFormat;
+                console.log(this.weather);
                 this.$refs.first.focus();
                 this.search = {city: "", unitFormat: "metric"};
                 this.cityError = false, this.unitFormatError = false, this.submitting = false;
@@ -78,6 +140,74 @@
                 if(errorFields.includes("unitFormat")) this.unitFormatError = true;
             }
         }).catch(error => console.log(error));
+      },
+      getUnitFormatIcon() {
+        var unitFormat = this.weather.unitFormat;
+        var unitFormatIcon;
+        if(unitFormat == "metric"){
+          unitFormatIcon = "°C";
+        }
+        else if(unitFormat == "imperial"){
+          unitFormatIcon = "°F";
+        }
+        else{
+          unitFormatIcon = "K";
+        }
+        return unitFormatIcon;
+      },
+      convertWindSpeed(speed){
+        var convertedSpeed;
+        if(speed > 0){
+          if(this.weather.unitFormat == "imperial"){
+            convertedSpeed = parseFloat(speed).toFixed(2) + " m/h";
+          }
+          else{
+            convertedSpeed = parseFloat(speed * 3.6).toFixed(2) + " km/h";
+          }
+        }
+        return convertedSpeed;
+      },
+      getWindDirection(angle){
+        var direction;
+        if(angle){
+          var directions;
+          if(this.language == "hr"){
+            directions = ["sjever", "sjeverozapad", "zapad", "jugozapad", "jug", "jugoistok", "istok", "sjeveroistok"];
+          }
+          else if(this.language == "de"){
+            directions = ["Nord", "Nord-West", "West", "Süd-West", "Süd", "Süd-Ost", "Ost", "Nord-Ost"];
+          }
+          else{
+            directions = ["North", "North-West", "West", "South-West", "South", "South-East", "East", "North-East"];
+          }
+          direction = directions[Math.round(((angle %= 360) < 0 ? angle + 360 : angle) / 45) % 8];
+        }
+        return direction;
+      },
+      convertTime(unixTime){
+        var date = new Date(unixTime * 1000);
+        var hours = date.getHours();
+        if(hours < 10){
+          hours = "0" + hours;
+        }
+        var minutes = "0" + date.getMinutes();
+        var time = hours + ":" + minutes.substr(-2);
+        return time;
+      },
+      convertDate(date){
+        var completeArray = date.split(" ");
+        var dateArray = completeArray[0].split("-");
+        var newDate;
+        if(this.language == "hr"){
+          newDate = dateArray[2] + "." + dateArray[1] + "." + dateArray[0] + " " + completeArray[1];
+        }
+        else if(this.language == "de"){
+          newDate = dateArray[2] + "/" + dateArray[1] + "/" + dateArray[0] + " " + completeArray[1];
+        }
+        else{
+          newDate = date;
+        }
+        return newDate;
       },
       clearCityStatus() { 
           this.cityError = false;
