@@ -229,7 +229,7 @@
 				this.languageConstants = ["Vrijeme", "Grad", "Metrički", "Imperijalni", "Standardni", "Spremi", "Lokacija", "Resetiraj", "Trenutno", "Prognoza", "Grad", "Osjećaj", "Minimalna", "Maksimalna", "Vjetar", "Vlaga", "Tlak", "Izlazak Sunca", "Zalazak Sunca", "Koordinate", "Dužina", "Širina", "Datum", "Temperatura", "Upišite ispravan grad!"];
 				break;
 			case "de":
-				this.languageConstants = ["Wetter", "Grad", "Metrisch", "Imperial", "Standard", "Speichern", "Standort", "Zurücksetzen", "Aktuell", "Vorschau", "Stadt", "Gefühlte", "Minimum", "Maximum", "Wind", "Feuchtigkeit", "Druck", "Sonnenaufgang", "Sonnenuntergang", "Koordinaten", "Länge", "Breite", "Datum", "Temperatur", "Fügen Sie eine Stadt ein!"];
+				this.languageConstants = ["Wetter", "Stadt", "Metrisch", "Imperial", "Standard", "Speichern", "Standort", "Zurücksetzen", "Aktuell", "Vorschau", "Stadt", "Gefühlte", "Minimum", "Maximum", "Wind", "Feuchtigkeit", "Druck", "Sonnenaufgang", "Sonnenuntergang", "Koordinaten", "Länge", "Breite", "Datum", "Temperatur", "Fügen Sie eine Stadt ein!"];
 				break;
 			default:
 				this.languageConstants = ["Weather", "City", "Metric", "Imperial", "Standard", "Submit", "Location", "Reset", "Current", "Forecast", "City", "Feels like", "Minimum", "Maximum", "Wind", "Humidity", "Pressure", "Sunrise", "Sunset", "Coordinates", "Longitude", "Latitude", "Date", "Temperature", "Provide a valid city!"];
