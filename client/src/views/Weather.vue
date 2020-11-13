@@ -142,7 +142,7 @@
 							temp.search = {city: "", unitFormat: "metric"};
 							temp.cityError = false;
 						} else {
-							this.cityError = true;
+							temp.cityError = true;
 						}
 					}).catch(error => console.log(error));
 				});
@@ -154,8 +154,7 @@
 			this.cityError = false;
 		},
 		getUnitFormatIcon() {
-			var unitFormat = this.weather.unitFormat;
-			switch(unitFormat) {
+			switch(this.weather.unitFormat) {
 				case "metric":
 					return "°C";
 				case "imperial":
