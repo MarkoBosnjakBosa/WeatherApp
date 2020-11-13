@@ -164,7 +164,7 @@
 					return "K";        }
 		},
 		convertWindSpeed(speed) {
-			var convertedSpeed;
+			var convertedSpeed = 0;
 			if(speed > 0) {
 				if(this.weather.unitFormat == "imperial") {
 					convertedSpeed = parseFloat(speed).toFixed(2) + " m/h";
@@ -176,17 +176,19 @@
 			return convertedSpeed;
 		},
 		getWindDirection(angle) {
-			var direction;
-			if(angle){
+			var direction = "";
+			if(angle) {
 				var directions;
-				if(this.language == "hr") {
-					directions = ["sjever", "sjeverozapad", "zapad", "jugozapad", "jug", "jugoistok", "istok", "sjeveroistok"];
-				}
-				else if(this.language == "de") {
-					directions = ["Nord", "Nord-West", "West", "Süd-West", "Süd", "Süd-Ost", "Ost", "Nord-Ost"];
-				}
-				else {
-					directions = ["North", "North-West", "West", "South-West", "South", "South-East", "East", "North-East"];
+				switch(this.language) {
+					case "hr":
+						directions = ["sjever", "sjeverozapad", "zapad", "jugozapad", "jug", "jugoistok", "istok", "sjeveroistok"];
+						break;
+					case "de":
+						directions = ["Nord", "Nord-West", "West", "Süd-West", "Süd", "Süd-Ost", "Ost", "Nord-Ost"];
+						break;
+					default:
+						directions = ["North", "North-West", "West", "South-West", "South", "South-East", "East", "North-East"];
+						break;
 				}
 				direction = directions[Math.round(((angle %= 360) < 0 ? angle + 360 : angle) / 45) % 8];
 			}
@@ -205,17 +207,14 @@
 		convertDate(date) {
 			var completeArray = date.split(" ");
 			var dateArray = completeArray[0].split("-");
-			var newDate;
-			if(this.language == "hr"){
-				newDate = dateArray[2] + "." + dateArray[1] + "." + dateArray[0] + " " + completeArray[1];
+			switch(this.language) {
+				case "hr":
+					return dateArray[2] + "." + dateArray[1] + "." + dateArray[0] + " " + completeArray[1]; 
+				case "de":
+					return dateArray[2] + "/" + dateArray[1] + "/" + dateArray[0] + " " + completeArray[1];
+				default:
+					return date;
 			}
-			else if(this.language == "de"){
-				newDate = dateArray[2] + "/" + dateArray[1] + "/" + dateArray[0] + " " + completeArray[1];
-			}
-			else{
-				newDate = date;
-			}
-			return newDate;
 		},
 		clearCityStatus() { this.cityError = false; },
 	},
