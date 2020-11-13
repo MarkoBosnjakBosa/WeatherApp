@@ -1,51 +1,51 @@
 <template>
 	<div id="weather" class="container-fluid">
 		<form autocomplete="off" @submit.prevent="getWeather()">
-			<h1>Weather</h1>
+			<h1>{{languageConstants[0]}}</h1>
 			<div class="form-group">
-				<input type="text" id="city" class="form-control" :class="{'errorField' : cityError}" placeholder="City" v-model="search.city" ref="first" @focus="clearCityStatus()" @keypress="clearCityStatus()"/>
-				<small v-if="cityError" class="form-text errorInput">Please provide a valid city!</small>
+				<input type="text" id="city" class="form-control" :class="{'errorField' : cityError}" :placeholder="languageConstants[1]" v-model="search.city" ref="first" @focus="clearCityStatus()" @keypress="clearCityStatus()"/>
+				<small v-if="cityError" class="form-text errorInput">{{languageConstants[24]}}</small>
 			</div>
 			<div class="form-group">
 				<div class="form-check form-check-inline">
 					<input type="radio" name="unitFormat" id="metric" class="form-check-input" value="metric" v-model="search.unitFormat" checked/>
-					<label for="metric" class="form-check-labe">Metric</label>
+					<label for="metric" class="form-check-labe">{{languageConstants[2]}}</label>
 				</div>
 				<div class="form-check form-check-inline">
 					<input type="radio" name="unitFormat" id="imperial" class="form-check-input" value="imperial" v-model="search.unitFormat"/>
-					<label for="imperial" class="form-check-labe">Imperial</label>
+					<label for="imperial" class="form-check-labe">{{languageConstants[3]}}</label>
 				</div>
 				<div class="form-check form-check-inline">
 					<input type="radio" name="unitFormat" id="standard" class="form-check-input" value="standard" v-model="search.unitFormat"/>
-					<label for="standard" class="form-check-labe">Standard</label>
+					<label for="standard" class="form-check-labe">{{languageConstants[4]}}</label>
 				</div>
 			</div>
 			<div class="form-group">
-				<button type="submit" class="btn btn-primary">Create</button>
-				<button type="button" class="btn currentLocation" @click="getWeatherByGeolocation()">Location <i class="fas fa-location-arrow"></i></button>
-				<button type="button" class="btn btn-danger" @click="resetWeather()">Reset</button>
+				<button type="submit" class="btn btn-primary">{{languageConstants[5]}}</button>
+				<button type="button" class="btn currentLocation" @click="getWeatherByGeolocation()">{{languageConstants[6]}} <i class="fas fa-location-arrow"></i></button>
+				<button type="button" class="btn btn-danger" @click="resetWeather()">{{languageConstants[7]}}</button>
 			</div>
 		</form>
 		<div v-if="Object.entries(weather.current).length && Object.entries(weather.forecast).length" class="weatherTabs">
 			<ul class="nav nav-tabs justify-content-center" role="tablist">
-				<li class="nav-item"><a id="weatherTab" class="nav-link active" data-toggle="tab" href="#weatherContent" role="tab" aria-controls="weather" aria-selected="true">{{languageConstants[0]}}</a></li>
-				<li class="nav-item"><a id="forecastTab" class="nav-link" data-toggle="tab" href="#forecastContent" role="tab" aria-controls="forecast" aria-selected="false">{{languageConstants[1]}}</a></li>
+				<li class="nav-item"><a id="weatherTab" class="nav-link active" data-toggle="tab" href="#weatherContent" role="tab" aria-controls="weather" aria-selected="true">{{languageConstants[8]}}</a></li>
+				<li class="nav-item"><a id="forecastTab" class="nav-link" data-toggle="tab" href="#forecastContent" role="tab" aria-controls="forecast" aria-selected="false">{{languageConstants[9]}}</a></li>
 			</ul>
 			<div class="tab-content">
 				<div id="weatherContent" class="tab-pane fade show active" role="tabpanel" aria-labelledby="weatherTab">
-					<div style="text-align: center"><img :src="'http://openweathermap.org/img/wn/' + weather.current.weather[0].icon + '@2x.png'" alt="Weather Icon"><b>{{weather.current.main.temp + " " + getUnitFormatIcon() + " - " + weather.current.weather[0].description}}</b>
+					<div class="aligned"><img :src="'http://openweathermap.org/img/wn/' + weather.current.weather[0].icon + '@2x.png'" alt="Weather Icon"><b>{{weather.current.main.temp + " " + getUnitFormatIcon() + " - " + weather.current.weather[0].description}}</b>
 						<table class="table table-striped">
 							<tbody>
-								<tr><td>{{languageConstants[2]}}</td><td>{{weather.current.name}}</td></tr>
-								<tr><td>{{languageConstants[3]}}</td><td>{{weather.current.main.feels_like + " " + getUnitFormatIcon()}}</td></tr>
-								<tr><td>{{languageConstants[4]}}</td><td>{{weather.current.main.temp_min + " " + getUnitFormatIcon()}}</td></tr>
-								<tr><td>{{languageConstants[5]}}</td><td>{{weather.current.main.temp_max + " " + getUnitFormatIcon()}}</td></tr>
-								<tr><td>{{languageConstants[6]}}</td><td>{{convertWindSpeed(weather.current.wind.speed) + " " + getWindDirection(weather.current.wind.deg)}}</td></tr>
-								<tr><td>{{languageConstants[7]}}</td><td>{{weather.current.main.humidity}} %</td></tr>
-								<tr><td>{{languageConstants[8]}}</td><td>{{weather.current.main.pressure}} hPa</td></tr>
-								<tr><td>{{languageConstants[9]}}</td><td>{{convertTime(weather.current.sys.sunrise)}}</td></tr>
-								<tr><td>{{languageConstants[10]}}</td><td>{{convertTime(weather.current.sys.sunset)}}</td></tr>
-								<tr><td>{{languageConstants[11]}}</td><td><span>{{languageConstants[12] + " " + weather.current.coord.lon}}</span><br/><span>{{languageConstants[13] + " " + weather.current.coord.lat}}</span></td></tr>
+								<tr><td>{{languageConstants[10]}}</td><td>{{weather.current.name}}</td></tr>
+								<tr><td>{{languageConstants[11]}}</td><td>{{weather.current.main.feels_like + " " + getUnitFormatIcon()}}</td></tr>
+								<tr><td>{{languageConstants[12]}}</td><td>{{weather.current.main.temp_min + " " + getUnitFormatIcon()}}</td></tr>
+								<tr><td>{{languageConstants[13]}}</td><td>{{weather.current.main.temp_max + " " + getUnitFormatIcon()}}</td></tr>
+								<tr><td>{{languageConstants[14]}}</td><td>{{convertWindSpeed(weather.current.wind.speed) + " " + getWindDirection(weather.current.wind.deg)}}</td></tr>
+								<tr><td>{{languageConstants[15]}}</td><td>{{weather.current.main.humidity + "%"}}</td></tr>
+								<tr><td>{{languageConstants[16]}}</td><td>{{weather.current.main.pressure + " hPa"}}</td></tr>
+								<tr><td>{{languageConstants[17]}}</td><td>{{convertTime(weather.current.sys.sunrise)}}</td></tr>
+								<tr><td>{{languageConstants[18]}}</td><td>{{convertTime(weather.current.sys.sunset)}}</td></tr>
+								<tr><td>{{languageConstants[19]}}</td><td><span>{{languageConstants[20] + " " + weather.current.coord.lon}}</span><br/><span>{{languageConstants[21] + " " + weather.current.coord.lat}}</span></td></tr>
 							</tbody>
 						</table>
 					</div>
@@ -54,13 +54,13 @@
 					<table class="table forecastTable">
 						<thead>
 							<tr>
+								<th>{{languageConstants[22]}}</th>
+								<th colspan="2" class="aligned">{{languageConstants[0]}}</th>
+								<th>{{languageConstants[23]}}</th>
+								<th>{{languageConstants[12]}}</th>
+								<th>{{languageConstants[13]}}</th>
 								<th>{{languageConstants[14]}}</th>
-								<th colspan="2" style="text-align: center">{{languageConstants[15]}}</th>
-								<th>{{languageConstants[16]}}</th>
-								<th>{{languageConstants[4]}}</th>
-								<th>{{languageConstants[5]}}</th>
-								<th>{{languageConstants[6]}}</th>
-								<th>{{languageConstants[7]}}</th>
+								<th>{{languageConstants[15]}}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -161,7 +161,8 @@
 				case "imperial":
 					return "°F";
 				default:
-					return "K";        }
+					return "K";        
+			}
 		},
 		convertWindSpeed(speed) {
 			var convertedSpeed = 0;
@@ -226,13 +227,13 @@
 		this.language = language;
 		switch(language) {
 			case "hr":
-				this.languageConstants = ["Trenutno", "Prognoza", "Grad", "Osjećaj", "Minimalna", "Maksimalna", "Vjetar", "Vlaga", "Tlak", "Izlazak Sunca", "Zalazak Sunca", "Koordinate", "Dužina", "Širina", "Datum", "Vrijeme", "Temperatura"];
+				this.languageConstants = ["Vrijeme", "Grad", "Metrički", "Imperijalni", "Standardni", "Spremi", "Lokacija", "Resetiraj", "Trenutno", "Prognoza", "Grad", "Osjećaj", "Minimalna", "Maksimalna", "Vjetar", "Vlaga", "Tlak", "Izlazak Sunca", "Zalazak Sunca", "Koordinate", "Dužina", "Širina", "Datum", "Temperatura", "Upišite ispravan grad!"];
 				break;
 			case "de":
-				this.languageConstants = ["Aktuell", "Vorschau", "Stadt", "Fühlt sich an wie", "Minimum", "Maximum", "Wind", "Feuchtigkeit", "Druck", "Sonnenaufgang", "Sonnenuntergang", "Koordinaten", "Länge", "Breite", "Datum", "Wetter", "Temperatur"];
+				this.languageConstants = ["Wetter", "Grad", "Metrisch", "Imperial", "Standard", "Speichern", "Standort", "Zurücksetzen", "Aktuell", "Vorschau", "Stadt", "Gefühlte", "Minimum", "Maximum", "Wind", "Feuchtigkeit", "Druck", "Sonnenaufgang", "Sonnenuntergang", "Koordinaten", "Länge", "Breite", "Datum", "Temperatur", "Fügen Sie eine Stadt ein!"];
 				break;
 			default:
-				this.languageConstants = ["Current", "Forecast", "City", "Feels like", "Minimum", "Maximum", "Wind", "Humidity", "Pressure", "Sunrise", "Sunset", "Coordinates", "Longitude", "Latitude", "Date", "Weather", "Temperature"];
+				this.languageConstants = ["Weather", "City", "Metric", "Imperial", "Standard", "Submit", "Location", "Reset", "Current", "Forecast", "City", "Feels like", "Minimum", "Maximum", "Wind", "Humidity", "Pressure", "Sunrise", "Sunset", "Coordinates", "Longitude", "Latitude", "Date", "Temperature", "Provide a valid city!"];
 		}
 	}
 }
@@ -260,6 +261,14 @@
 	.weatherTabs {
 		margin: 0 auto;
 		max-width: 1200px;
+	}
+	.aligned {
+		text-align: center;
+	}
+	.forecastTable td{
+		vertical-align: middle;
+		padding-top: 0;
+		padding-bottom: 0;
 	}
 	.errorField {
 		border: 1px solid #ff0000;
