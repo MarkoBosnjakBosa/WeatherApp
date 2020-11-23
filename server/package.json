@@ -1,7 +1,7 @@
 {
 	"name": "weatherapp",
 	"version": "1.0.0",
-	"description": "WeatherApp - application for displaying weather in three different languages",
+	"description": "Application for displaying weather in three different languages",
 	"main": "app.js",
 	"scripts": {
 		"watch": "nodemon ./app.js"
